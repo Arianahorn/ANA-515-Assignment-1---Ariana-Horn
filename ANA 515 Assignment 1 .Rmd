@@ -1,0 +1,78 @@
+---
+title: "ANA 515 Assignment 1"
+author: "Ariana Horn"
+date: "6/5/2022"
+output: 
+ html_document:
+ theme: 
+  bootswatch: cerulean
+---
+
+```{r, incluse=FALSE}
+#installed packages 
+library(bslib)
+library(knitr)
+library(tidyverse)
+```
+
+```{r, include=FALSE}
+#url for this data 
+url <- "https://raw.githubusercontent.com/fivethirtyeight/guns-data/master/full_data.csv"
+
+#rename dataset 
+gun_deaths <- read.csv(url)
+
+#new dataset fitler youth from gun_deaths by age <= 65
+youth <- gun_deaths %>%
+  filter(age <= 65)
+```
+
+```{r, include=FALSE}
+#summary of the youth dataset
+summary(youth)
+```
+
+We have data about `r nrow(gun_deaths)` individuals killed by guns. Only `r nrow(gun_deaths) - nrow(youth)` are older than 65. The distribution of the remainder is shown below:
+
+```{r youth-dist, echo = FALSE}
+#code chunk to graph the distribution of the age variable from the youth dataset
+# gun deaths by age 
+youth %>% 
+  ggplot(aes(age)) + 
+  geom_freqpoly(binwidth = 1)
+```
+
+```{r race-dist,echo=FALSE}
+#code chunk to graph the distribution of youth by race 
+# gun deaths by race 
+
+youth %>%
+  ggplot(aes(fct_infreq(race) %>% fct_rev())) +
+  geom_bar() +
+  coord_flip() +
+  labs(x = "Victim race")
+```
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
